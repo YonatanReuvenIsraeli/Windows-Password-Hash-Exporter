@@ -1,4 +1,4 @@
 # Windows Password Hash Exporter
 ## Notes:
-You will need to use impacket-secretsdump in Kali Linux to view the hashes.  
-Once you have the hash, you can use a tool like Hashcat to crack the hash.
+**1.** You will need to use impacket-secretsdump in Kali Linux to view the hashes.  
+**2.** Once you have the hash, you can use a tool like Hashcat to crack the hash.
