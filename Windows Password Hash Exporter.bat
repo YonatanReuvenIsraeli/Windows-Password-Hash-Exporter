@@ -7,6 +7,7 @@ goto Disclaimer
 
 :Disclaimer
 echo.
+set Disclaimer=
 set /p Disclaimer="Do you agree to the Disclaimer? (Yes/No) "
 if /i "%Disclaimer%"=="Yes" goto Start
 if /i "%Disclaimer%"=="No" goto Exit
@@ -15,6 +16,7 @@ goto Disclaimer
 
 :Start
 echo.
+set HashPath=
 set /p HashPath="Where do you want to save the Windows password hashes to? "
 if not exist "%HashPath%" goto HashPathNotExist
 md "%HashPath%\Windows Password Hashes"
