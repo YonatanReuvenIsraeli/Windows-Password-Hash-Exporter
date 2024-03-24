@@ -7,3 +7,4 @@
 **2.** Once you have the hash, you can use a tool like Hashcat to crack the hash.  
 **3.** The hashing algorithm used by Windows to hash the passwords is the NTLM hash algorithm.  
 **4.** The hash mode in Hashcat for NTLM is 1000.
+**5.** This will not work if NTLM is disabled.
