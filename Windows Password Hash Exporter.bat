@@ -1,7 +1,7 @@
 @echo off
 setlocal
 title Windows Password Hash Exporter
-echo Windows Password Hash Exporter v1.0
+echo Windows Password Hash Exporter v1.0.1
 echo.
 echo Please run this batch file as an administrator.
 echo READ DISCLAIMER ^-^-^> THIS IS FOR EDUCATIONAL PURPOSES ONLY! DO NOT USE THIS ON SOMEONE ELSES PC WITHOUT THEIR EXPLICIT PERMISSION! THIS IS A HACK! CONTINUE AT YOUR OWN RISK! WE HOLD NO RESPONSIBILITY FOR ANYTHING THAT HAPPEND, IS HAPPENING, AND/OR WILL HAPPEN BECAUSE OF THIS BATCH FILE!
@@ -29,7 +29,7 @@ echo Use impacket-secretsdump in Kali Linux to extract the hashes from "%HashPat
 goto Done
 
 :HashPathNotExist
-echo %HashPath% does not exist. Please try again.
+echo "%HashPath%" does not exist. Please try again.
 goto Start
 
 :Done
