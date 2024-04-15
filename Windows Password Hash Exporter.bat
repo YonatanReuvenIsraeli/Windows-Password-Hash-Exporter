@@ -2,7 +2,7 @@
 setlocal
 title Windows Password Hash Exporter
 echo Program Name: Windows Password Hash Exporter
-echo Version: 1.1.0
+echo Version: 1.1.1
 echo Developer: @YonatanReuvenIsraeli
 echo Website: https://www.yonatanreuvenisraeli.dev
 echo License: GNU General Public License v3.0
@@ -39,5 +39,5 @@ goto Start
 
 :Done
 endlocal
-pause > nul
+pause > nul 2>&1
 exit
