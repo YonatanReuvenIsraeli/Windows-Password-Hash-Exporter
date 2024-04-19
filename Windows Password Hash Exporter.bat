@@ -2,17 +2,28 @@
 setlocal
 title Windows Password Hash Exporter
 echo Program Name: Windows Password Hash Exporter
-echo Version: 1.1.2
+echo Version: 2.0.0
 echo Developer: @YonatanReuvenIsraeli
 echo Website: https://www.yonatanreuvenisraeli.dev
 echo License: GNU General Public License v3.0
-echo.
-echo.
-echo Please run this batch file as an administrator.
-echo READ DISCLAIMER ^-^-^> THIS IS FOR EDUCATIONAL PURPOSES ONLY! DO NOT USE THIS ON SOMEONE ELSES PC WITHOUT THEIR EXPLICIT PERMISSION! THIS IS A HACK! CONTINUE AT YOUR OWN RISK! WE HOLD NO RESPONSIBILITY FOR ANYTHING THAT HAPPEND, IS HAPPENING, AND/OR WILL HAPPEN BECAUSE OF THIS BATCH FILE!
+net session > nul 2>&1
+if not "%errorlevel%"=="0" goto NotAdministrator
 goto Disclaimer
 
+:NotAdministrator
+echo.
+echo Please run this batch file as an administrator. Press any key to close this batch file.
+pause > nul 2>&1
+goto Close
+
+:Close
+endlocal
+exit
+
 :Disclaimer
+echo.
+echo READ DISCLAIMER ^-^-^> THIS IS FOR EDUCATIONAL PURPOSES ONLY! DO NOT USE THIS ON SOMEONE ELSES PC WITHOUT THEIR EXPLICIT PERMISSION! THIS IS A HACK! CONTINUE AT YOUR OWN RISK! WE HOLD NO RESPONSIBILITY FOR ANYTHING THAT HAPPEND, IS HAPPENING, AND/OR WILL HAPPEN BECAUSE OF THIS BATCH FILE!
+goto Disclaimer
 echo.
 set Disclaimer=
 set /p Disclaimer="Do you agree to the Disclaimer? (Yes/No) "
