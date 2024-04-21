@@ -2,7 +2,7 @@
 setlocal
 title Windows Password Hash Exporter
 echo Program Name: Windows Password Hash Exporter
-echo Version: 2.1.0
+echo Version: 2.1.1
 echo Developer: @YonatanReuvenIsraeli
 echo Website: https://www.yonatanreuvenisraeli.dev
 echo License: GNU General Public License v3.0
@@ -22,7 +22,7 @@ goto Close
 endlocal
 exit
 
-:WindowsRecoverynvironment
+:WindowsRecoverynEvironment
 echo.
 echo Please do not run this batch file from Windows Recovery Environment. Press any key to close this batch file.
 pause > nul 2>&1
