@@ -2,7 +2,7 @@
 setlocal
 title Windows Password Hash Exporter
 echo Program Name: Windows Password Hash Exporter
-echo Version: 2.1.4
+echo Version: 2.1.5
 echo Developer: @YonatanReuvenIsraeli
 echo Website: https://www.yonatanreuvenisraeli.dev
 echo License: GNU General Public License v3.0
@@ -48,11 +48,11 @@ goto "Export"
 
 :"Export"
 if exist "%HashPath%\Windows Password Hashes" goto "WindowsPasswordHashesExist"
+echo Exporting Windows password hashes on this PC.
 md "%HashPath%\Windows Password Hashes"
 reg save HKLM\SAM "%HashPath%\Windows Password Hashes\SAM.save"
 reg save HKLM\SYSTEM "%HashPath%\Windows Password Hashes\SYSTEM.save"
-echo.
-echo Use impacket-secretsdump in Kali Linux to extract the hashes from "%HashPath%\Windows Password Hashes". You can then use a tool like Hashcat to crack the hash. Press any key to close this batch file.
+echo Windows password hashes exported. Use impacket-secretsdump in Kali Linux to extract the hashes from "%HashPath%\Windows Password Hashes". You can then use a tool like Hashcat to crack the hash. Press any key to close this batch file.
 pause > nul 2>&1
 goto "Done"
 
