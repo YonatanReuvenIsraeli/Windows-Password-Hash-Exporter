@@ -2,14 +2,14 @@
 setlocal
 title Windows Password Hash Exporter
 echo Program Name: Windows Password Hash Exporter
-echo Version: 2.1.5
+echo Version: 2.1.6
 echo Developer: @YonatanReuvenIsraeli
 echo Website: https://www.yonatanreuvenisraeli.dev
 echo License: GNU General Public License v3.0
 net session > nul 2>&1
 if not "%errorlevel%"=="0" goto "NotAdministrator"
 net user > nul 2>&1
-if not "%errorlevel%"=="0" goto "WindowsRecoveryEnvironment"
+if not "%errorlevel%"=="0" goto "InWindowsRecoveryEnvironment"
 goto "Disclaimer"
 
 :"NotAdministrator"
@@ -18,7 +18,7 @@ echo Please run this batch file as an administrator. Press any key to close this
 pause > nul 2>&1
 goto "Close"
 
-:"WindowsRecoverynEvironment"
+:"InWindowsRecoverynEvironment"
 echo.
 echo Please do not run this batch file from Windows Recovery Environment. Press any key to close this batch file.
 pause > nul 2>&1
