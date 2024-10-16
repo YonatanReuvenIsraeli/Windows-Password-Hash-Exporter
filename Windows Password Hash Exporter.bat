@@ -2,7 +2,7 @@
 setlocal
 title Windows Password Hash Exporter
 echo Program Name: Windows Password Hash Exporter
-echo Version: 3.0.0
+echo Version: 3.1.0
 echo Developer: @YonatanReuvenIsraeli
 echo Website: https://www.yonatanreuvenisraeli.dev
 echo License: GNU General Public License v3.0
@@ -85,40 +85,68 @@ set /p HashPath="Where do you want to save the Windows password hashes to? "
 if not exist "%HashPath%" goto "HashPathNotExistOnline"
 goto "ExportOnline"
 
+:"HashPathNotExistOnline"
+echo "%HashPath%" does not exist. Please try again.
+goto "Online"
+
 :"ExportOnline"
 if exist "%HashPath%\Windows Password Hashes" goto "WindowsPasswordHashesExistOnline"
+echo.
 echo Exporting Windows password hashes on this PC.
 md "%HashPath%\Windows Password Hashes"
 reg save HKLM\SAM "%HashPath%\Windows Password Hashes\SAM.save" > nul 2>&1
 if not "%errorlevel%"=="0" goto "Error"
 reg save HKLM\SYSTEM "%HashPath%\Windows Password Hashes\SYSTEM.save" > nul 2>&1
 if not "%errorlevel%"=="0" goto "Error"
-echo Windows password hashes exported. Use impacket-secretsdump in Kali Linux to extract the hashes from "%HashPath%\Windows Password Hashes". You can then use a tool like Hashcat to crack the hash. Press any key to close this batch file.
-pause > nul 2>&1
 goto "Done"
 
-:"HashPathNotExistOnline"
-echo "%HashPath%" does not exist. Please try again.
-goto "Online"
-
 :"WindowsPasswordHashesExistOnline"
+echo.
 echo Please rename or move to another location "%HashPath%\Windows Password Hashes" in order for this batch file to proceed. Press any key to continue when you have renamed or moved "%HashPath%\Windows Password Hashes".
 pause > nul 2>&1
 goto "ExportOnline"
 
 :"Offline"
+reg query HKLM | find /i "HKEY_LOCAL_MACHINE\SAM1" > nul 2>&1
+if "%errorlevel%"=="0" goto "RegistryExistSAM"
+goto "SYSTEM"
+
+:"RegistryExistSAM"
+set SAM=True
+echo.
+echo Please temporary rename to something else or temporary move to another location "HKEY_LOCAL_MACHINE\SAM1" in order for this batch file to proceed. ""HKEY_LOCAL_MACHINE\SAM1"" is not a system hive. Press any key to continue when ""HKEY_LOCAL_MACHINE\SAM1"" is renamed to something else or moved to another location. This batch file will let you know when you can rename it back to its original name or move it back to its original location.
+pause > nul 2>&1
+goto "Offline"
+
+:"SYSTEM"
+reg query HKLM | find /i "HKEY_LOCAL_MACHINE\SYSTEM1" > nul 2>&1
+if "%errorlevel%"=="0" goto "RegistryExistSYSTEM"
 reg load HKLM\SAM1 "%DriveLetter%\Windows\System32\config\SAM" > nul 2>&1
 if not "%errorlevel%"=="0" goto "InvalidWindowsInstallation"
 reg load HKLM\SYSTEM1 "%DriveLetter%\Windows\System32\config\SYSTEM" > nul 2>&1
+goto "HashPath"
+
+:"RegistryExistSYSTEM"
+set SYSTEM=True
+echo.
+echo Please temporary rename to something else or temporary move to another location "HKEY_LOCAL_MACHINE\SYSTEM1" in order for this batch file to proceed. "HKEY_LOCAL_MACHINE\SYSTEM1" is not a system hive. Press any key to continue when "HKEY_LOCAL_MACHINE\SYSTEM1" is renamed to something else or moved to another location. This batch file will let you know when you can rename it back to its original name or move it back to its original location.
+pause > nul 2>&1
+goto "SYSTEM"
+
+:"InvalidWindowsInstallation"
+echo "%DriveLetter%" is an invalid Windows installation! Please try again.
+goto "Start"
+
+:"HashPath"
 echo.
 set HashPath=
 set /p HashPath="Where do you want to save the Windows password hashes to? "
 if not exist "%HashPath%" goto "HashPathNotExistOffline"
 goto "ExportOffline"
 
-:"InvalidWindowsInstallation"
-echo "%DriveLetter%" is an invalid Windows installation! Please try again.
-goto "Start"
+:"HashPathNotExistOffline"
+echo "%HashPath%" does not exist. Please try again.
+goto "HashPath"
 
 :"ExportOffline"
 if exist "%HashPath%\Windows Password Hashes" goto "WindowsPasswordHashesExistOffline"
@@ -130,15 +158,10 @@ reg save HKLM\SYSTEM1 "%HashPath%\Windows Password Hashes\SYSTEM.save" > nul 2>&
 if not "%errorlevel%"=="0" goto "Error"
 reg unload HKLM\SAM1 > nul 2>&1
 reg unload HKLM\SYSTEM1 > nul 2>&1
-echo Windows password hashes exported. Use impacket-secretsdump in Kali Linux to extract the hashes from "%HashPath%\Windows Password Hashes". You can then use a tool like Hashcat to crack the hash. Press any key to close this batch file.
-pause > nul 2>&1
-goto "Done"
-
-:"HashPathNotExistOffline"
-echo "%HashPath%" does not exist. Please try again.
-goto "Offline"
+goto "RegistrySAMDone"
 
 :"WindowsPasswordHashesExistOffline"
+echo.
 echo Please rename or move to another location "%HashPath%\Windows Password Hashes" in order for this batch file to proceed. Press any key to continue when you have renamed or moved "%HashPath%\Windows Password Hashes".
 pause > nul 2>&1
 goto "ExportOffline"
@@ -147,6 +170,26 @@ goto "ExportOffline"
 echo There has been an error. you can try again.
 goto "Start"
 
+:"RegistrySAMDone"
+if "%SAM%"=="True" goto "SAM"
+goto "RegistrySYSTEMDone"
+
+:"SAM"
+echo.
+echo You can now rename or move back the hive back to "HKEY_LOCAL_MACHINE\SAM1".
+goto "RegistrySYSTEMDone"
+
+:"RegistrySYSTEMDone"
+if "%YSTEM%"=="True" goto "SYSTEM"
+goto "Done"
+
+:"SYSTEM"
+echo.
+echo You can now rename or move back the hive back to "HKEY_LOCAL_MACHINE\SYSTEM1".
+goto "Done"
+
 :"Done"
+echo Windows password hashes exported. Use impacket-secretsdump in Kali Linux to extract the hashes from "%HashPath%\Windows Password Hashes". You can then use a tool like Hashcat to crack the hash. Press any key to close this batch file.
 endlocal
+pause > nul 2>&1
 exit
