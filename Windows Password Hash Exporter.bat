@@ -2,7 +2,7 @@
 setlocal
 title Windows Password Hash Exporter
 echo Program Name: Windows Password Hash Exporter
-echo Version: 3.1.3
+echo Version: 3.1.4
 echo Developer: @YonatanReuvenIsraeli
 echo Website: https://www.yonatanreuvenisraeli.dev
 echo License: GNU General Public License v3.0
@@ -83,14 +83,17 @@ echo.
 set HashPath=
 set /p HashPath="Where do you want to save the Windows password hashes to? "
 if not exist "%HashPath%" goto "HashPathNotExistOnline"
-goto "ExportOnline"
+goto "HashSetOnline"
 
 :"HashPathNotExistOnline"
 echo "%HashPath%" does not exist. Please try again.
 goto "Online"
 
+:"HashSetOnline"
+set Hash=
+goto "ExportOnline"
+
 :"ExportOnline"
-echo.
 if exist "%HashPath%\Windows Password Hashes" goto "WindowsPasswordHashesExistOnline"
 echo.
 echo Exporting Windows password hashes on drive letter "%DriveLetter%".
@@ -103,12 +106,18 @@ echo Windows password hashes exported on drive letter "%DriveLetter%".
 goto "Done"
 
 :"WindowsPasswordHashesExistOnline"
+set Hash=True
 echo.
-echo Please rename or move to another location "%HashPath%\Windows Password Hashes" in order for this batch file to proceed. Press any key to continue when you have renamed or moved "%HashPath%\Windows Password Hashes".
+Please temporary rename to something else or temporary move to another location "%HashPath%\Windows Password Hashes" in order for this batch file to proceed. "%HashPath%\Windows Password Hashes" is not a system file. Press any key to continue when "%cd%\DiskPart.txt" is renamed to something else or moved to another location. This batch file will let you know when you can rename it back to its original name or move it back to its original location.
 pause > nul 2>&1
 goto "ExportOnline"
 
 :"Offline"
+set SAM=
+set SYSTEM=
+goto "RegistryCheck"
+
+:"RegistryCheck"
 if not exist "%DriveLetter%\Windows\System32\config" goto "InvalidWindowsInstallation"
 reg query HKLM | find /i "HKEY_LOCAL_MACHINE\SAM1" > nul 2>&1
 if "%errorlevel%"=="0" goto "RegistryExistSAM"
@@ -125,14 +134,14 @@ set SAM=True
 echo.
 echo Please temporary rename to something else or temporary move to another location "HKEY_LOCAL_MACHINE\SAM1" in order for this batch file to proceed. ""HKEY_LOCAL_MACHINE\SAM1"" is not a system hive. Press any key to continue when ""HKEY_LOCAL_MACHINE\SAM1"" is renamed to something else or moved to another location. This batch file will let you know when you can rename it back to its original name or move it back to its original location.
 pause > nul 2>&1
-goto "Offline"
+goto "RegistryCheck"
 
 :"RegistryExistSYSTEM"
 set SYSTEM=True
 echo.
 echo Please temporary rename to something else or temporary move to another location "HKEY_LOCAL_MACHINE\SYSTEM1" in order for this batch file to proceed. "HKEY_LOCAL_MACHINE\SYSTEM1" is not a system hive. Press any key to continue when "HKEY_LOCAL_MACHINE\SYSTEM1" is renamed to something else or moved to another location. This batch file will let you know when you can rename it back to its original name or move it back to its original location.
 pause > nul 2>&1
-goto "Offline"
+goto "RegistryCheck"
 
 :"Load"
 reg load HKLM\SAM1 "%DriveLetter%\Windows\System32\config\SAM" > nul 2>&1
@@ -144,15 +153,19 @@ echo.
 set HashPath=
 set /p HashPath="Where do you want to save the Windows password hashes to? "
 if not exist "%HashPath%" goto "HashPathNotExistOffline"
-goto "ExportOffline"
+goto "HashSetOffline"
 
 :"HashPathNotExistOffline"
 echo "%HashPath%" does not exist. Please try again.
 goto "HashPath"
 
+:"HashSetOffline"
+set Hash=
+goto "ExportOffline"
+
 :"ExportOffline"
-echo.
 if exist "%HashPath%\Windows Password Hashes" goto "WindowsPasswordHashesExistOffline"
+echo.
 echo Exporting Windows password hashes on drive letter "%DriveLetter%".
 md "%HashPath%\Windows Password Hashes"
 reg save HKLM\SAM1 "%HashPath%\Windows Password Hashes\SAM.save" > nul 2>&1
@@ -165,8 +178,9 @@ reg unload HKLM\SYSTEM1 > nul 2>&1
 goto "RegistrySAMDone"
 
 :"WindowsPasswordHashesExistOffline"
+set Hash=True
 echo.
-echo Please rename or move to another location "%HashPath%\Windows Password Hashes" in order for this batch file to proceed. Press any key to continue when you have renamed or moved "%HashPath%\Windows Password Hashes".
+Please temporary rename to something else or temporary move to another location "%HashPath%\Windows Password Hashes" in order for this batch file to proceed. "%HashPath%\Windows Password Hashes" is not a system file. Press any key to continue when "%cd%\DiskPart.txt" is renamed to something else or moved to another location. This batch file will let you know when you can rename it back to its original name or move it back to its original location.
 pause > nul 2>&1
 goto "ExportOffline"
 
