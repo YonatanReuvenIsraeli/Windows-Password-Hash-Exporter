@@ -2,7 +2,7 @@
 setlocal
 title Windows Password Hash Exporter
 echo Program Name: Windows Password Hash Exporter
-echo Version: 3.1.1
+echo Version: 3.1.2
 echo Developer: @YonatanReuvenIsraeli
 echo Website: https://www.yonatanreuvenisraeli.dev
 echo License: GNU General Public License v3.0
@@ -109,6 +109,7 @@ pause > nul 2>&1
 goto "ExportOnline"
 
 :"Offline"
+if not exist "%DriveLetter%\Windows\System32\config" goto "InvalidWindowsInstallation"
 reg query HKLM | find /i "HKEY_LOCAL_MACHINE\SAM1" > nul 2>&1
 if "%errorlevel%"=="0" goto "RegistryExistSAM"
 goto "SYSTEM"
@@ -123,9 +124,10 @@ goto "Offline"
 :"SYSTEM"
 reg query HKLM | find /i "HKEY_LOCAL_MACHINE\SYSTEM1" > nul 2>&1
 if "%errorlevel%"=="0" goto "RegistryExistSYSTEM"
-reg load HKLM\SAM1 "%DriveLetter%\Windows\System32\config\SAM" > nul 2>&1
-if not "%errorlevel%"=="0" goto "InvalidWindowsInstallation"
+if not "%errorlevel%"=="0" goto "Error"
+set RegistrySAM=True
 reg load HKLM\SYSTEM1 "%DriveLetter%\Windows\System32\config\SYSTEM" > nul 2>&1
+set RegistrySYSTEM=True
 goto "HashPath"
 
 :"RegistryExistSYSTEM"
@@ -161,7 +163,9 @@ reg save HKLM\SYSTEM1 "%HashPath%\Windows Password Hashes\SYSTEM.save" > nul 2>&
 if not "%errorlevel%"=="0" goto "Error"
 echo Windows password hashes exported on drive letter "%DriveLetter%". 
 reg unload HKLM\SAM1 > nul 2>&1
+set RegistrySAM=
 reg unload HKLM\SYSTEM1 > nul 2>&1
+set RegistrySYSTEM=
 goto "RegistrySAMDone"
 
 :"WindowsPasswordHashesExistOffline"
@@ -171,6 +175,10 @@ pause > nul 2>&1
 goto "ExportOffline"
 
 :"Error"
+if "%RegistrySAM%"=="True" reg unload HKLM\SAM1 > nul 2>&1
+set RegistrySAM=
+if "%RegistrySYSTEM%"=="True" reg unload HKLM\SYSTEM1 > nul 2>&1
+set RegistrySYSTEM=
 echo There has been an error. you can try again.
 goto "Start"
 
