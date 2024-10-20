@@ -2,7 +2,7 @@
 setlocal
 title Windows Password Hash Exporter
 echo Program Name: Windows Password Hash Exporter
-echo Version: 3.1.2
+echo Version: 3.1.3
 echo Developer: @YonatanReuvenIsraeli
 echo Website: https://www.yonatanreuvenisraeli.dev
 echo License: GNU General Public License v3.0
@@ -112,7 +112,13 @@ goto "ExportOnline"
 if not exist "%DriveLetter%\Windows\System32\config" goto "InvalidWindowsInstallation"
 reg query HKLM | find /i "HKEY_LOCAL_MACHINE\SAM1" > nul 2>&1
 if "%errorlevel%"=="0" goto "RegistryExistSAM"
-goto "SYSTEM"
+reg query HKLM | find /i "HKEY_LOCAL_MACHINE\SYSTEM1" > nul 2>&1
+if "%errorlevel%"=="0" goto "RegistryExistSYSTEM"
+goto "Load"
+
+:"InvalidWindowsInstallation"
+echo "%DriveLetter%" is an invalid Windows installation! Please try again.
+goto "Start"
 
 :"RegistryExistSAM"
 set SAM=True
@@ -121,25 +127,17 @@ echo Please temporary rename to something else or temporary move to another loca
 pause > nul 2>&1
 goto "Offline"
 
-:"SYSTEM"
-reg query HKLM | find /i "HKEY_LOCAL_MACHINE\SYSTEM1" > nul 2>&1
-if "%errorlevel%"=="0" goto "RegistryExistSYSTEM"
-if not "%errorlevel%"=="0" goto "Error"
-set RegistrySAM=True
-reg load HKLM\SYSTEM1 "%DriveLetter%\Windows\System32\config\SYSTEM" > nul 2>&1
-set RegistrySYSTEM=True
-goto "HashPath"
-
 :"RegistryExistSYSTEM"
 set SYSTEM=True
 echo.
 echo Please temporary rename to something else or temporary move to another location "HKEY_LOCAL_MACHINE\SYSTEM1" in order for this batch file to proceed. "HKEY_LOCAL_MACHINE\SYSTEM1" is not a system hive. Press any key to continue when "HKEY_LOCAL_MACHINE\SYSTEM1" is renamed to something else or moved to another location. This batch file will let you know when you can rename it back to its original name or move it back to its original location.
 pause > nul 2>&1
-goto "SYSTEM"
+goto "Offline"
 
-:"InvalidWindowsInstallation"
-echo "%DriveLetter%" is an invalid Windows installation! Please try again.
-goto "Start"
+:"Load"
+reg load HKLM\SAM1 "%DriveLetter%\Windows\System32\config\SAM" > nul 2>&1
+reg load HKLM\SYSTEM1 "%DriveLetter%\Windows\System32\config\SYSTEM" > nul 2>&1
+goto "HashPath"
 
 :"HashPath"
 echo.
@@ -163,9 +161,7 @@ reg save HKLM\SYSTEM1 "%HashPath%\Windows Password Hashes\SYSTEM.save" > nul 2>&
 if not "%errorlevel%"=="0" goto "Error"
 echo Windows password hashes exported on drive letter "%DriveLetter%". 
 reg unload HKLM\SAM1 > nul 2>&1
-set RegistrySAM=
 reg unload HKLM\SYSTEM1 > nul 2>&1
-set RegistrySYSTEM=
 goto "RegistrySAMDone"
 
 :"WindowsPasswordHashesExistOffline"
@@ -175,10 +171,8 @@ pause > nul 2>&1
 goto "ExportOffline"
 
 :"Error"
-if "%RegistrySAM%"=="True" reg unload HKLM\SAM1 > nul 2>&1
-set RegistrySAM=
-if "%RegistrySYSTEM%"=="True" reg unload HKLM\SYSTEM1 > nul 2>&1
-set RegistrySYSTEM=
+reg unload HKLM\SAM1 > nul 2>&1
+reg unload HKLM\SYSTEM1 > nul 2>&1
 echo There has been an error. you can try again.
 goto "Start"
 
