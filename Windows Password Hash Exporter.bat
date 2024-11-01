@@ -2,7 +2,7 @@
 setlocal
 title Windows Password Hash Exporter
 echo Program Name: Windows Password Hash Exporter
-echo Version: 3.1.4
+echo Version: 3.1.5
 echo Developer: @YonatanReuvenIsraeli
 echo Website: https://www.yonatanreuvenisraeli.dev
 echo License: GNU General Public License v3.0
@@ -200,7 +200,7 @@ echo You can now rename or move back the hive back to "HKEY_LOCAL_MACHINE\SAM1".
 goto "RegistrySYSTEMDone"
 
 :"RegistrySYSTEMDone"
-if "%YSTEM%"=="True" goto "SYSTEM"
+if "%SYSTEM%"=="True" goto "SYSTEM"
 goto "Done"
 
 :"SYSTEM"
