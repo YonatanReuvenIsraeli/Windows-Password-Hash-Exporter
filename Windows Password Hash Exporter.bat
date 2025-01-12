@@ -2,7 +2,7 @@
 setlocal
 title Windows Password Hash Exporter
 echo Program Name: Windows Password Hash Exporter
-echo Version: 3.1.7
+echo Version: 4.0.0
 echo License: GNU General Public License v3.0
 echo Developer: @YonatanReuvenIsraeli
 echo GitHub: https://github.com/YonatanReuvenIsraeli
@@ -23,15 +23,148 @@ echo READ DISCLAIMER ^-^-^> THIS IS FOR EDUCATIONAL PURPOSES ONLY! DO NOT USE TH
 echo.
 set Disclaimer=
 set /p Disclaimer="Do you agree to the Disclaimer? (Yes/No) "
-if /i "%Disclaimer%"=="Yes" goto "Start"
+if /i "%Disclaimer%"=="Yes" goto "OnlineOffline"
 if /i "%Disclaimer%"=="No" goto "Exit"
 echo Invalid syntax!
 goto "Disclaimer"
 
-:"Start"
+:"OnlineOffline"
+echo.
+set OnlineOffline=
+set /p OnlineOffline="Are you getting the Windows password hashes of an online Windows installation or an offline Windows installation? (Online/Offline) "
+if /i "%OnlineOffline%"=="Online" goto "Online"
+if /i "%OnlineOffline%"=="Offline" goto "Volume"
+echo Invalid syntax!
+goto "OnlineOffline"
+
+:"Volume"
+if exist "diskpart.txt" goto "DiskPartExistVolume"
+echo.
+echo Listing volumes attached to this PC.
+(echo list vol) > "diskpart.txt"
+(echo exit) >> "diskpart.txt"
+"%windir%\System32\diskpart.exe" /s "diskpart.txt" 2>&1
+if not "%errorlevel%"=="0" goto "VolumeError"
+del "diskpart.txt" /f /q > nul 2>&1
+echo Volumes attached to this PC listed.
+goto "WindowsAsk1"
+
+:"DiskPartExistVolume"
+set DiskPart=True
+echo.
+echo Please temporary rename to something else or temporary move to another location "diskpart.txt" in order for this batch file to proceed. Press any key to continue when "diskpart.txt" is renamed to something else or moved to another location. This batch file will let you know when you can rename it back to its original name or move it back to its original location.
+pause > nul 2>&1
+goto "Volume"
+
+:"VolumeError"
+del "diskpart.txt" /f /q > nul 2>&1
+echo.
+echo There has been an error! Press any key to try again.
+pause > nul 2>&1
+goto "Volume"
+
+:"WindowsAsk1"
+echo.
+set WindowsVolume=
+set /p WindowsVolume="What volume is the Windows volume? (0-?) "
+goto "SureWindowsAsk1"
+
+:"SureWindowsAsk1"
+echo.
+set SureWindowsAsk1=
+set /p SureWindowsAsk1="Are you sure volume %WindowsVolume% is the Windows volume? (Yes/No) "
+if /i "%SureWindowsAsk1%"=="Yes" goto "WindowsAsk2"
+if /i "%SureWindowsAsk1%"=="No" goto "Volume"
+echo Invalid syntax!
+goto "SureWindowsAsk1"
+
+:"WindowsAsk2"
+echo.
+set WindowsAsk=
+set /p WindowsAsk="Is the Windows volume %WindowsVolume% already assigned a drive letter? (Yes/No) "
+if /i "%WindowsAsk%"=="Yes" goto "SureWindowsAsk2"
+if /i "%WindowsAsk%"=="No" goto "EnterAssignDriveLetter"
+echo Invalid syntax!
+goto "WindowsAsk2"
+
+:"SureWindowsAsk2"
+echo.
+set SureWindowsAsk2=
+set /p SureWindowsAsk2="Are you sure Windows volume %WindowsVolume% is already assigned a drive letter? (Yes/No) "
+if /i "%SureWindowsAsk2%"=="Yes" goto "DriveLetter"
+if /i "%SureWindowsAsk2%"=="No" goto "WindowsAsk2"
+echo Invalid syntax!
+goto "SureWindowsAsk2"
+
+:"EnterAssignDriveLetter"
+echo.
+set EnterAssignDriveLetter=
+set /p DriveLetter="Enter an unused drive letter. (A:-Z:) "
+if exist "%DriveLetter%" goto "EnterAssignDriveLetterExist"
+if /i "%DriveLetter%"=="A:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="B:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="C:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="D:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="E:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="F:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="G:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="H:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="I:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="J:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="K:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="L:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="M:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="N:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="O:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="P:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="Q:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="R:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="S:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="T:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="U:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="V:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="W:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="X:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="Y:" goto "AssignDriveLetter"
+if /i "%DriveLetter%"=="Z:" goto "AssignDriveLetter"
+echo Invalid syntax!
+goto "EnterAssignDriveLetter"
+
+:"EnterAssignDriveLetterExist"
+echo "%AssignDriveLetter%" exists! Please try again.
+goto "AssignDriveLetter"
+
+:"AssignDriveLetter"
+if exist "diskpart.txt" goto "DiskPartExistAssignDriveLetter"
+echo.
+echo Assigning Windows volume %WindowsVolume% drive letter "%DriveLetter%".
+(echo sel vol %WindowsVolume%) > "diskpart.txt"
+(echo assign letter=%DriveLetter%) >> "diskpart.txt"
+(echo exit) >> "diskpart.txt"
+"%windir%\System32\diskpart.exe" /s "diskpart.txt" > nul 2>&1
+if not "%errorlevel%"=="0" goto "AssignDriveLetterError"
+del "diskpart.txt" /f /q > nul 2>&1
+echo Assigned Windows volume %WindowsVolume% drive letter "%DriveLetter%".
+set DriveLetter=%DriveLetter%
+goto "Offline"
+
+:"DiskPartExistAssignDriveLetter"
+set DiskPart=True
+echo.
+echo Please temporary rename to something else or temporary move to another location "diskpart.txt" in order for this batch file to proceed. Press any key to continue when "diskpart.txt" is renamed to something else or moved to another location. This batch file will let you know when you can rename it back to its original name or move it back to its original location.
+pause > nul 2>&1
+goto "AssignDriveLetter"
+
+:"AssignDriveLetterError"
+del "diskpart.txt" /f /q > nul 2>&1
+echo There has been an error! Press any key to try again.
+pause > nul 2>&1
+goto "AssignDriveLetterExist"
+
+:"DriveLetter"
 echo.
 set DriveLetter=
-set /p DriveLetter="What is the drive letter of your Windows installation? (A:-Z:) "
+set /p DriveLetter="What is the drive letter of your offline Windows installation? (A:-Z:) "
 if /i "%DriveLetter%"=="A:" goto "SureDriveLetter"
 if /i "%DriveLetter%"=="B:" goto "SureDriveLetter"
 if /i "%DriveLetter%"=="C:" goto "SureDriveLetter"
@@ -64,20 +197,30 @@ goto "DriveLetter"
 :"SureDriveLetter"
 echo.
 set SureDriveLetter=
-set /p SureDriveLetter="Are you sure "%DriveLetter%" is the drive letter of your Windows installation? (Yes/No) "
+set /p SureDriveLetter="Are you sure "%DriveLetter%" is the drive letter that Windows is installed on? (Yes/No) "
 if /i "%SureDriveLetter%"=="Yes" goto "CheckExistDriveLetter"
 if /i "%SureDriveLetter%"=="No" goto "DriveLetter"
 echo Invalid syntax!
 goto "SureDriveLetter"
 
 :"CheckExistDriveLetter"
-if not exist "%DriveLetter%" goto "NotExist"
-if /i "%DriveLetter%"=="%SystemDrive%" goto "Online"
+if not exist "%DriveLetter%" goto "DriveLetterNotExist"
+if not exist "%DriveLetter%"\Windows goto "NotWindows"
+if "%DriveLetter%"=="%SystemDrive%" goto "IsOnline"
 goto "Offline"
 
-:"NotExist"
-echo "%DriveLetter%" does not exist. Please try again.
-goto "Start"
+:"DriveLetterNotExist"
+echo "%DriveLetter%" does not exist! Please try again.
+goto "DriveLetter"
+
+:"NotWindows"
+echo Windows not installed on "%DriveLetter%"!
+goto DriveLetter
+goto "Volume"
+
+:"IsOnline"
+echo "%DriveLetter%" is an online Windows installation!
+goto "OnlineOffline"
 
 :"Online"
 echo.
@@ -109,7 +252,7 @@ goto "Done"
 :"WindowsPasswordHashesExistOnline"
 set Hash=True
 echo.
-Please temporary rename to something else or temporary move to another location "%HashPath%\Windows Password Hashes" in order for this batch file to proceed. "%HashPath%\Windows Password Hashes" is not a system file. Press any key to continue when "%cd%\DiskPart.txt" is renamed to something else or moved to another location. This batch file will let you know when you can rename it back to its original name or move it back to its original location.
+echo Please temporary rename to something else or temporary move to another location "%HashPath%\Windows Password Hashes" in order for this batch file to proceed. "%HashPath%\Windows Password Hashes" is not a system file. Press any key to continue when "\DiskPart.txt" is renamed to something else or moved to another location. This batch file will let you know when you can rename it back to its original name or move it back to its original location.
 pause > nul 2>&1
 goto "ExportOnline"
 
@@ -181,7 +324,7 @@ goto "RegistrySAMDone"
 :"WindowsPasswordHashesExistOffline"
 set Hash=True
 echo.
-Please temporary rename to something else or temporary move to another location "%HashPath%\Windows Password Hashes" in order for this batch file to proceed. "%HashPath%\Windows Password Hashes" is not a system file. Press any key to continue when "%cd%\DiskPart.txt" is renamed to something else or moved to another location. This batch file will let you know when you can rename it back to its original name or move it back to its original location.
+echo Please temporary rename to something else or temporary move to another location "%HashPath%\Windows Password Hashes" in order for this batch file to proceed. "%HashPath%\Windows Password Hashes" is not a system file. Press any key to continue when "\DiskPart.txt" is renamed to something else or moved to another location. This batch file will let you know when you can rename it back to its original name or move it back to its original location.
 pause > nul 2>&1
 goto "ExportOffline"
 
