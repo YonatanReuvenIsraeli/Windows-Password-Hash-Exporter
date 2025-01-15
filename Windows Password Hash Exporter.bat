@@ -2,7 +2,7 @@
 setlocal
 title Windows Password Hash Exporter
 echo Program Name: Windows Password Hash Exporter
-echo Version: 4.0.1
+echo Version: 4.0.2
 echo License: GNU General Public License v3.0
 echo Developer: @YonatanReuvenIsraeli
 echo GitHub: https://github.com/YonatanReuvenIsraeli
@@ -241,7 +241,7 @@ goto "ExportOnline"
 if exist "%HashPath%\Windows Password Hashes" goto "WindowsPasswordHashesExistOnline"
 echo.
 echo Exporting Windows password hashes on drive letter "%DriveLetter%".
-md "%HashPath%\Windows Password Hashes"
+md "%HashPath%\Windows Password Hashes" > nul 2>&1
 "%windir%\System32\reg.exe" save HKLM\SAM "%HashPath%\Windows Password Hashes\SAM.save" > nul 2>&1
 if not "%errorlevel%"=="0" goto "Error"
 "%windir%\System32\reg.exe" save HKLM\SYSTEM "%HashPath%\Windows Password Hashes\SYSTEM.save" > nul 2>&1
@@ -311,7 +311,7 @@ goto "ExportOffline"
 if exist "%HashPath%\Windows Password Hashes" goto "WindowsPasswordHashesExistOffline"
 echo.
 echo Exporting Windows password hashes on drive letter "%DriveLetter%".
-md "%HashPath%\Windows Password Hashes"
+md "%HashPath%\Windows Password Hashes" > nul 2>&1
 "%windir%\System32\reg.exe" save HKLM\SAM1 "%HashPath%\Windows Password Hashes\SAM.save" > nul 2>&1
 if not "%errorlevel%"=="0" goto "Error"
 "%windir%\System32\reg.exe" save HKLM\SYSTEM1 "%HashPath%\Windows Password Hashes\SYSTEM.save" > nul 2>&1
