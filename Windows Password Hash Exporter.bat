@@ -2,7 +2,7 @@
 setlocal
 title Windows Password Hash Exporter
 echo Program Name: Windows Password Hash Exporter
-echo Version: 4.0.2
+echo Version: 4.0.3
 echo License: GNU General Public License v3.0
 echo Developer: @YonatanReuvenIsraeli
 echo GitHub: https://github.com/YonatanReuvenIsraeli
@@ -205,7 +205,7 @@ goto "SureDriveLetter"
 
 :"CheckExistDriveLetter"
 if not exist "%DriveLetter%" goto "DriveLetterNotExist"
-if not exist "%DriveLetter%"\Windows goto "NotWindows"
+if not exist "%DriveLetter%\Windows" goto "NotWindows"
 if "%DriveLetter%"=="%SystemDrive%" goto "IsOnline"
 goto "Offline"
 
@@ -215,7 +215,6 @@ goto "DriveLetter"
 
 :"NotWindows"
 echo Windows not installed on "%DriveLetter%"!
-goto DriveLetter
 goto "Volume"
 
 :"IsOnline"
