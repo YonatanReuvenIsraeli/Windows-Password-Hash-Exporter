@@ -1,4 +1,4 @@
-# Windows Password Hash Exporter v4.0.6
+# Windows Password Hash Exporter v4.0.7
 
 ## This batch file, named "Windows Password Hash Exporter.bat", is designed for educational purposes only to demonstrate potential vulnerabilities in Windows operating systems. It should only be used in controlled testing environments with explicit authorization.
 
