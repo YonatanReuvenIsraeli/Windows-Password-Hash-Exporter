@@ -2,7 +2,7 @@
 title Windows Password Hash Exporter
 setlocal
 echo Program Name: Windows Password Hash Exporter
-echo Version: 5.0.6
+echo Version: 5.0.7
 echo License: GNU General Public License v3.0
 echo Developer: @YonatanReuvenIsraeli
 echo GitHub: https://github.com/YonatanReuvenIsraeli
@@ -137,16 +137,11 @@ set SYSTEM=
 goto "RegistryCheck"
 
 :"RegistryCheck"
-if not exist "%DriveLetter%\Windows\System32\config" goto "InvalidWindowsInstallation"
 "%windir%\System32\reg.exe" query HKLM | find /i "HKEY_LOCAL_MACHINE\SAM1" > nul 2>&1
 if "%errorlevel%"=="0" goto "RegistryExistSAM"
 "%windir%\System32\reg.exe" query HKLM | find /i "HKEY_LOCAL_MACHINE\SYSTEM1" > nul 2>&1
 if "%errorlevel%"=="0" goto "RegistryExistSYSTEM"
 goto "Load"
-
-:"InvalidWindowsInstallation"
-echo "%DriveLetter%" is an invalid Windows installation! Please try again.
-goto "Start"
 
 :"RegistryExistSAM"
 set SAM=True
