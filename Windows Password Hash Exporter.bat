@@ -2,7 +2,7 @@
 title Windows Password Hash Exporter
 setlocal
 echo Program Name: Windows Password Hash Exporter
-echo Version: 5.0.3
+echo Version: 5.0.4
 echo License: GNU General Public License v3.0
 echo Developer: @YonatanReuvenIsraeli
 echo GitHub: https://github.com/YonatanReuvenIsraeli
@@ -173,7 +173,6 @@ del "diskpart.txt" /f /q > nul 2>&1
 echo Assigned Windows volume %WindowsVolume% drive letter "%WindowsDriveLetter%".
 set DriveLetterWindows=%WindowsDriveLetter%
 if not exist "%DriveLetterWindows%\Windows" goto "NotWindowsAssign"
-if /i "%DriveLetterWindows%"=="%SystemDrive%" goto "IsOnlineAssign"
 goto "Start"
 
 :"DiskPartExistAssignDriveLetterWindows"
