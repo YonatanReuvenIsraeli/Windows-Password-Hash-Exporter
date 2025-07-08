@@ -2,7 +2,7 @@
 title Windows Password Hash Exporter
 setlocal
 echo Program Name: Windows Password Hash Exporter
-echo Version: 4.0.8
+echo Version: 5.0.0
 echo License: GNU General Public License v3.0
 echo Developer: @YonatanReuvenIsraeli
 echo GitHub: https://github.com/YonatanReuvenIsraeli
@@ -83,7 +83,7 @@ echo.
 set WindowsAsk=
 set /p WindowsAsk="Is the Windows volume %WindowsVolume% already assigned a drive letter? (Yes/No) "
 if /i "%WindowsAsk%"=="Yes" goto "SureWindowsAsk2"
-if /i "%WindowsAsk%"=="No" goto "EnterAssignDriveLetter"
+if /i "%WindowsAsk%"=="No" goto "WindowsDriveLetter"
 echo Invalid syntax!
 goto "WindowsAsk2"
 
@@ -91,134 +91,159 @@ goto "WindowsAsk2"
 echo.
 set SureWindowsAsk2=
 set /p SureWindowsAsk2="Are you sure Windows volume %WindowsVolume% is already assigned a drive letter? (Yes/No) "
-if /i "%SureWindowsAsk2%"=="Yes" goto "DriveLetter"
+if /i "%SureWindowsAsk2%"=="Yes" goto "DriveLetterWindows"
 if /i "%SureWindowsAsk2%"=="No" goto "WindowsAsk2"
 echo Invalid syntax!
 goto "SureWindowsAsk2"
 
-:"EnterAssignDriveLetter"
+:"WindowsDriveLetter"
 echo.
-set EnterAssignDriveLetter=
-set /p DriveLetter="Enter an unused drive letter. (A:-Z:) "
-if exist "%DriveLetter%" goto "EnterAssignDriveLetterExist"
-if /i "%DriveLetter%"=="A:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="B:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="C:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="D:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="E:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="F:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="G:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="H:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="I:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="J:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="K:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="L:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="M:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="N:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="O:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="P:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="Q:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="R:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="S:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="T:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="U:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="V:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="W:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="X:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="Y:" goto "AssignDriveLetter"
-if /i "%DriveLetter%"=="Z:" goto "AssignDriveLetter"
-echo Invalid syntax!
-goto "EnterAssignDriveLetter"
+echo Finding an available drive letter.
+if not exist "A:" set WindowsDriveLetter=A:
+if not exist "A:" goto "AvailableDriveLetterFound"
+if not exist "B:" set WindowsDriveLetter=B:
+if not exist "B:" goto "AvailableDriveLetterFound"
+if not exist "C:" set WindowsDriveLetter=C:
+if not exist "C:" goto "AvailableDriveLetterFound"
+if not exist "D:" set WindowsDriveLetter=D:
+if not exist "D:" goto "AvailableDriveLetterFound"
+if not exist "E:" set WindowsDriveLetter=E:
+if not exist "E:" goto "AvailableDriveLetterFound"
+if not exist "F:" set WindowsDriveLetter=F:
+if not exist "F:" goto "AvailableDriveLetterFound"
+if not exist "G:" set WindowsDriveLetter=G:
+if not exist "G:" goto "AvailableDriveLetterFound"
+if not exist "H:" set WindowsDriveLetter=H:
+if not exist "H:" goto "AvailableDriveLetterFound"
+if not exist "I:" set WindowsDriveLetter=I:
+if not exist "I:" goto "AvailableDriveLetterFound"
+if not exist "J:" set WindowsDriveLetter=J:
+if not exist "J:" goto "AvailableDriveLetterFound"
+if not exist "K:" set WindowsDriveLetter=K:
+if not exist "K:" goto "AvailableDriveLetterFound"
+if not exist "L:" set WindowsDriveLetter=L:
+if not exist "L:" goto "AvailableDriveLetterFound"
+if not exist "M:" set WindowsDriveLetter=M:
+if not exist "M:" goto "AvailableDriveLetterFound"
+if not exist "N:" set WindowsDriveLetter=N:
+if not exist "N:" goto "AvailableDriveLetterFound"
+if not exist "O:" set WindowsDriveLetter=O:
+if not exist "O:" goto "AvailableDriveLetterFound"
+if not exist "P:" set WindowsDriveLetter=P:
+if not exist "P:" goto "AvailableDriveLetterFound"
+if not exist "Q:" set WindowsDriveLetter=Q:
+if not exist "Q:" goto "AvailableDriveLetterFound"
+if not exist "R:" set WindowsDriveLetter=R:
+if not exist "R:" goto "AvailableDriveLetterFound"
+if not exist "S:" set WindowsDriveLetter=S:
+if not exist "S:" goto "AvailableDriveLetterFound"
+if not exist "T:" set WindowsDriveLetter=T:
+if not exist "T:" goto "AvailableDriveLetterFound"
+if not exist "U:" set WindowsDriveLetter=U:
+if not exist "U:" goto "AvailableDriveLetterFound"
+if not exist "V:" set WindowsDriveLetter=V:
+if not exist "V:" goto "AvailableDriveLetterFound"
+if not exist "W:" set WindowsDriveLetter=W:
+if not exist "W:" goto "AvailableDriveLetterFound"
+if not exist "X:" set WindowsDriveLetter=X:
+if not exist "X:" goto "AvailableDriveLetterFound"
+if not exist "Y:" set WindowsDriveLetter=Y:
+if not exist "Y:" goto "AvailableDriveLetterFound"
+if not exist "Z:" set WindowsDriveLetter=Z:
+if not exist "Z:" goto "AvailableDriveLetterFound"
+echo No drive letter is available! Please unmount 1 drive and then press any key to try again.
+pause > nul 2>&1
+goto "WindowsDriveLetter"
 
-:"EnterAssignDriveLetterExist"
-echo "%AssignDriveLetter%" exists! Please try again.
-goto "AssignDriveLetter"
+:"AvailableDriveLetterFound"
+echo Available drive letter found.
+goto "AssignDriveLetterWindows"
 
-:"AssignDriveLetter"
-if exist "diskpart.txt" goto "DiskPartExistAssignDriveLetter"
+:"AssignDriveLetterWindows"
+if exist "diskpart.txt" goto "DiskPartExistAssignDriveLetterWindows"
 echo.
-echo Assigning Windows volume %WindowsVolume% drive letter "%DriveLetter%".
-(echo sel vol %WindowsVolume%) > "diskpart.txt"
-(echo assign letter=%DriveLetter%) >> "diskpart.txt"
+echo Assigning Windows volume %WindowsVolume% drive letter "%WindowsDriveLetter%".
+(echo automount scrub) >
+(echo sel vol %WindowsVolume%) >> "diskpart.txt"
+(echo assign letter=%WindowsDriveLetter%) >> "diskpart.txt"
 (echo exit) >> "diskpart.txt"
 "%windir%\System32\diskpart.exe" /s "diskpart.txt" > nul 2>&1
-if not "%errorlevel%"=="0" goto "AssignDriveLetterError"
+if not "%errorlevel%"=="0" goto "AssignDriveLetterWindowsError"
 del "diskpart.txt" /f /q > nul 2>&1
-echo Assigned Windows volume %WindowsVolume% drive letter "%DriveLetter%".
-set DriveLetter=%DriveLetter%
-goto "Offline"
+echo Assigned Windows volume %WindowsVolume% drive letter "%WindowsDriveLetter%".
+set DriveLetterWindows=%WindowsDriveLetter%
+goto "Start"
 
-:"DiskPartExistAssignDriveLetter"
+:"DiskPartExistAssignDriveLetterWindows"
 set DiskPart=True
 echo.
 echo Please temporarily rename to something else or temporarily move to another location "diskpart.txt" in order for this batch file to proceed. "diskpart.txt" is not a system file. "diskpart.txt" is located in the folder "%cd%". Press any key to continue when "diskpart.txt" is renamed to something else or moved to another location. This batch file will let you know when you can rename it back to its original name or move it back to its original location.
 pause > nul 2>&1
-goto "AssignDriveLetter"
+goto "AssignDriveLetterWindows"
 
-:"AssignDriveLetterError"
+:"AssignDriveLetterWindowsError"
 del "diskpart.txt" /f /q > nul 2>&1
 echo There has been an error! Press any key to try again.
 pause > nul 2>&1
-goto "AssignDriveLetterExist"
+goto "WindowsDriveLetterExist"
 
-:"DriveLetter"
+:"DriveLetterWindows"
 echo.
-set DriveLetter=
-set /p DriveLetter="What is the drive letter of your offline Windows installation? (A:-Z:) "
-if /i "%DriveLetter%"=="A:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="B:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="C:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="D:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="E:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="F:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="G:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="H:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="I:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="J:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="K:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="L:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="M:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="N:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="O:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="P:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="Q:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="R:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="S:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="T:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="U:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="V:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="W:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="X:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="Y:" goto "SureDriveLetter"
-if /i "%DriveLetter%"=="Z:" goto "SureDriveLetter"
+set DriveLetterWindows=
+set /p DriveLetterWindows="What is the drive letter that Windows is installed on? (A:-Z:) "
+if /i "%DriveLetterWindows%"=="A:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="B:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="C:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="D:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="E:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="F:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="G:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="H:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="I:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="J:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="K:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="L:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="M:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="N:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="O:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="P:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="Q:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="R:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="S:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="T:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="U:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="V:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="W:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="X:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="Y:" goto "SureDriveLetterWindows"
+if /i "%DriveLetterWindows%"=="Z:" goto "SureDriveLetterWindows"
 echo Invalid syntax!
-goto "DriveLetter"
+goto "DriveLetterWindows"
 
-:"SureDriveLetter"
+:"SureDriveLetterWindows"
 echo.
-set SureDriveLetter=
-set /p SureDriveLetter="Are you sure "%DriveLetter%" is the drive letter that Windows is installed on? (Yes/No) "
-if /i "%SureDriveLetter%"=="Yes" goto "CheckExistDriveLetter"
-if /i "%SureDriveLetter%"=="No" goto "DriveLetter"
+set SureDriveLetterWindows=
+set /p SureDriveLetterWindows="Are you sure "%DriveLetterWindows%" is the drive letter that Windows is installed on? (Yes/No) "
+if /i "%SureDriveLetterWindows%"=="Yes" goto "CheckExistDriveLetterWindows"
+if /i "%SureDriveLetterWindows%"=="No" goto "DriveLetterWindows"
 echo Invalid syntax!
-goto "SureDriveLetter"
+goto "SureDriveLetterWindows"
 
-:"CheckExistDriveLetter"
-if not exist "%DriveLetter%" goto "DriveLetterNotExist"
-if not exist "%DriveLetter%\Windows" goto "NotWindows"
-if "%DriveLetter%"=="%SystemDrive%" goto "IsOnline"
-goto "Offline"
+:"CheckExistDriveLetterWindows"
+if not exist "%DriveLetterWindows%" goto "DriveLetterWindowsNotExist"
+if not exist "%DriveLetterWindows%\Windows" goto "NotWindows"
+goto "Start"
 
-:"DriveLetterNotExist"
-echo "%DriveLetter%" does not exist! Please try again.
+:"DriveLetterWindowsNotExist"
+echo "%DriveLetterWindows%" does not exist! Please try again.
 goto "Volume"
 
 :"NotWindows"
-echo Windows not installed on "%DriveLetter%"!
+echo Windows not installed on "%DriveLetterWindows%"!
 goto "Volume"
 
 :"IsOnline"
-echo "%DriveLetter%" is an online Windows installation!
+echo "%DriveLetterWindows%" is an online Windows installation!
 goto "OnlineOffline"
 
 :"Online"
@@ -239,13 +264,13 @@ goto "ExportOnline"
 :"ExportOnline"
 if exist "%HashPath%\Windows Password Hashes" goto "WindowsPasswordHashesExistOnline"
 echo.
-echo Exporting Windows password hashes on drive letter "%DriveLetter%".
+echo Exporting Windows password hashes on drive letter "%SystemDrive%".
 md "%HashPath%\Windows Password Hashes" > nul 2>&1
 "%windir%\System32\reg.exe" save HKLM\SAM "%HashPath%\Windows Password Hashes\SAM.save" > nul 2>&1
 if not "%errorlevel%"=="0" goto "Error"
 "%windir%\System32\reg.exe" save HKLM\SYSTEM "%HashPath%\Windows Password Hashes\SYSTEM.save" > nul 2>&1
 if not "%errorlevel%"=="0" goto "Error"
-echo Windows password hashes exported on drive letter "%DriveLetter%". 
+echo Windows password hashes exported on drive letter "%SystemDrive%". 
 goto "Done"
 
 :"WindowsPasswordHashesExistOnline"
@@ -269,7 +294,7 @@ if "%errorlevel%"=="0" goto "RegistryExistSYSTEM"
 goto "Load"
 
 :"InvalidWindowsInstallation"
-echo "%DriveLetter%" is an invalid Windows installation! Please try again.
+echo "%DriveLetterWindows%" is an invalid Windows installation! Please try again.
 goto "Start"
 
 :"RegistryExistSAM"
@@ -309,13 +334,13 @@ goto "ExportOffline"
 :"ExportOffline"
 if exist "%HashPath%\Windows Password Hashes" goto "WindowsPasswordHashesExistOffline"
 echo.
-echo Exporting Windows password hashes on drive letter "%DriveLetter%".
+echo Exporting Windows password hashes on drive letter "%DriveLetterWindows%".
 md "%HashPath%\Windows Password Hashes" > nul 2>&1
 "%windir%\System32\reg.exe" save HKLM\SAM1 "%HashPath%\Windows Password Hashes\SAM.save" > nul 2>&1
 if not "%errorlevel%"=="0" goto "Error"
 "%windir%\System32\reg.exe" save HKLM\SYSTEM1 "%HashPath%\Windows Password Hashes\SYSTEM.save" > nul 2>&1
 if not "%errorlevel%"=="0" goto "Error"
-echo Windows password hashes exported on drive letter "%DriveLetter%". 
+echo Windows password hashes exported on drive letter "%DriveLetterWindows%". 
 "%windir%\System32\reg.exe" unload HKLM\SAM1 > nul 2>&1
 "%windir%\System32\reg.exe" unload HKLM\SYSTEM1 > nul 2>&1
 goto "RegistrySAMDone"
