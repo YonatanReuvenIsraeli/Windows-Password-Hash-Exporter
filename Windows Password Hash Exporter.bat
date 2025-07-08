@@ -2,7 +2,7 @@
 title Windows Password Hash Exporter
 setlocal
 echo Program Name: Windows Password Hash Exporter
-echo Version: 5.0.2
+echo Version: 5.0.3
 echo License: GNU General Public License v3.0
 echo Developer: @YonatanReuvenIsraeli
 echo GitHub: https://github.com/YonatanReuvenIsraeli
@@ -314,8 +314,8 @@ pause > nul 2>&1
 goto "RegistryCheck"
 
 :"Load"
-"%windir%\System32\reg.exe" load HKLM\SAM1 "%DriveLetter%\Windows\System32\config\SAM" > nul 2>&1
-"%windir%\System32\reg.exe" load HKLM\SYSTEM1 "%DriveLetter%\Windows\System32\config\SYSTEM" > nul 2>&1
+"%windir%\System32\reg.exe" load HKLM\SAM1 "%DriveLetterWindows%\Windows\System32\config\SAM" > nul 2>&1
+"%windir%\System32\reg.exe" load HKLM\SYSTEM1 "%DriveLetterWindows%\Windows\System32\config\SYSTEM" > nul 2>&1
 goto "HashPath"
 
 :"HashPath"
