@@ -2,7 +2,7 @@
 title Windows Password Hash Exporter
 setlocal
 echo Program Name: Windows Password Hash Exporter
-echo Version: 5.0.9
+echo Version: 5.0.10
 echo License: GNU General Public License v3.0
 echo Developer: @YonatanReuvenIsraeli
 echo GitHub: https://github.com/YonatanReuvenIsraeli
@@ -201,7 +201,7 @@ goto "ExportOffline"
 :"Error"
 "%windir%\System32\reg.exe" unload HKLM\SAM1 > nul 2>&1
 "%windir%\System32\reg.exe" unload HKLM\SYSTEM1 > nul 2>&1
-echo There has been an error. you can try again.
+echo There has been an error. You can try again.
 goto "Start"
 
 :"RegistrySAMDone"
