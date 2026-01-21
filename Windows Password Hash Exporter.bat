@@ -2,7 +2,7 @@
 title Windows Password Hash Exporter
 setlocal
 echo Program Name: Windows Password Hash Exporter
-echo Version: 5.0.10
+echo Version: 5.0.11
 echo License: GNU General Public License v3.0
 echo Developer: @YonatanReuvenIsraeli
 echo GitHub: https://github.com/YonatanReuvenIsraeli
@@ -117,9 +117,9 @@ if exist "%HashPath%\Windows Password Hashes" goto "WindowsPasswordHashesExistOn
 echo.
 echo Exporting Windows password hashes on drive letter "%SystemDrive%".
 md "%HashPath%\Windows Password Hashes" > nul 2>&1
-"%windir%\System32\reg.exe" save HKLM\SAM "%HashPath%\Windows Password Hashes\SAM.save" > nul 2>&1
+"%windir%\System32\reg.exe" save HKLM\SAM "%HashPath%\Windows Password Hashes\SAM" > nul 2>&1
 if not "%errorlevel%"=="0" goto "Error"
-"%windir%\System32\reg.exe" save HKLM\SYSTEM "%HashPath%\Windows Password Hashes\SYSTEM.save" > nul 2>&1
+"%windir%\System32\reg.exe" save HKLM\SYSTEM "%HashPath%\Windows Password Hashes\SYSTEM" > nul 2>&1
 if not "%errorlevel%"=="0" goto "Error"
 echo Windows password hashes exported on drive letter "%SystemDrive%". 
 goto "Done"
@@ -182,9 +182,9 @@ if exist "%HashPath%\Windows Password Hashes" goto "WindowsPasswordHashesExistOf
 echo.
 echo Exporting Windows password hashes on drive letter "%DriveLetter%".
 md "%HashPath%\Windows Password Hashes" > nul 2>&1
-"%windir%\System32\reg.exe" save HKLM\SAM1 "%HashPath%\Windows Password Hashes\SAM.save" > nul 2>&1
+"%windir%\System32\reg.exe" save HKLM\SAM1 "%HashPath%\Windows Password Hashes\SAM" > nul 2>&1
 if not "%errorlevel%"=="0" goto "Error"
-"%windir%\System32\reg.exe" save HKLM\SYSTEM1 "%HashPath%\Windows Password Hashes\SYSTEM.save" > nul 2>&1
+"%windir%\System32\reg.exe" save HKLM\SYSTEM1 "%HashPath%\Windows Password Hashes\SYSTEM" > nul 2>&1
 if not "%errorlevel%"=="0" goto "Error"
 echo Windows password hashes exported on drive letter "%DriveLetter%". 
 "%windir%\System32\reg.exe" unload HKLM\SAM1 > nul 2>&1
